@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+  <div>
+    <router-link :to="{ name: 'site' }">主页</router-link>
+  </div>
 </template>
 
 <script>

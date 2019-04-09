@@ -29,7 +29,10 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['@/plugins/iview'],
+  plugins: [
+    { src: '@/plugins/iview', ssr: true },
+    { src: '@/plugins/tool', ssr: false }
+  ],
 
   /*
    ** Nuxt.js modules

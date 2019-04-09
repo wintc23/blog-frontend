@@ -1,5 +1,5 @@
-import store from '@/store'
-import Vue from 'vue'
+// import store from '@/store'
+// import Vue from 'vue'
 
 export function IsPC () {
   var userAgentInfo = navigator.userAgent
@@ -24,5 +24,5 @@ export function setToken (token) {
 
 export function clearToken () {
   localStorage.removeItem('authToken')
-  store.commit('userInfo/clearInfo')
+  // store.commit('userInfo/clearInfo')
 }

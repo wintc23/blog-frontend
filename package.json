@@ -15,9 +15,12 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/pwa": "^2.6.0",
+    "axios": "^0.18.0",
     "cross-env": "^5.2.0",
-    "iview": "3.1.5",
-    "nuxt": "^2.4.0"
+    "iview": "^3.3.3",
+    "lodash": "^4.17.11",
+    "nuxt": "^2.4.0",
+    "simple-vue-tree": "^2.0.3"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^0.0.1",
