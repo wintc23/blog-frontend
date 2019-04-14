@@ -16,7 +16,7 @@
       <div class="post-list">
         <div class="post" v-for="post of postList" :key="post.id">
           <div class="img">
-            <img src="http://demo.cssmoban.com/cssthemes5/ccpt_12_cid/res/img/sy_img3.jpg" alt="">
+            <img :src="post.abstract_image" alt="">
           </div>
           <div class="post-content">
             <h3 :title="post.title">{{ post.title }}</h3>
