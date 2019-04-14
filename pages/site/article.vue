@@ -21,7 +21,7 @@
         <div class="title">评论</div>
         <div class="add-comment">
           <CommentInput placeholder="既然来了，就说几句吧" v-model="comment"></CommentInput>
-          <Button class="comment-button" type="success" @click.stop="addComment(comment)">确定</Button>
+          <Button class="comment-button" type="success" size="small" @click.stop="addComment(comment)">确定</Button>
           <!-- <Button class="comment-button" type="text">取消</Button> -->
         </div>
         <div class="comments">
@@ -48,14 +48,14 @@
                     <div class="date">{{ $formatTime(data.timestamp) }}</div>
                   </div>
                   <div class="comment-content">
-                    <p>{{ data.body }}</p>
+                    <p @click.stop="checkReply(data)">{{ data.body }}</p>
                     <div class="comment-reply">
                       <template v-if="data.commentEdit">
-                        <Input class="reply-input" placeholder="说点啥呢．．．" type="textarea" autosize v-model="data.comment"/>
+                        <Input class="reply-input" placeholder="回复：说点啥呢．．．" type="textarea" autosize v-model="data.comment"/>
                         <Button class="comment-button" size="small" type="success" @click.stop="addComment(data.comment, data.id)">确定</Button>
                         <Button class="comment-button" size="small" type="text" @click.stop="hideComment(data)">取消</Button>
                       </template>
-                      <span class="reply-icon" @click.stop="setComment(data)" v-else>
+                      <span class="reply-icon" @click.stop="setComment(data)" v-else-if="$IsPC">
                         <Icon type="ios-paper-plane" class="icon" />
                         <span>回复</span>
                       </span>
@@ -161,7 +161,7 @@ export default {
       return this.$store.getters['postType/list'] || []
     },
     type () {
-      let type = this.typeList.find(item => item.id === this.postData.type)
+      let type = this.typeList.find(item => item.id === this.postData.type_id)
       return type
     },
     currentUser () {
@@ -218,6 +218,10 @@ export default {
       }).catch(error => {
         this.$Message.error('网络请求失败')
       })
+    },
+    checkReply (data) {
+      if (this.$IsPC) return
+      this.setComment(data)
     }
   }
 }

@@ -6,8 +6,8 @@
       </div>
       <div class="msg-area">
         <div class="add-msg">
-          <CommentInput placeholder="既然来了，就说几句吧" v-model="msg"></CommentInput>
-          <Button class="msg-button" type="success" @click.stop="addMessage(msg)">确定</Button>
+          <CommentInput placeholder="有什么想对我说的，在这里给我留言吧" v-model="msg"></CommentInput>
+          <Button class="msg-button" type="success" size="small" @click.stop="addMessage(msg)">确定</Button>
           <!-- <Button class="msg-button" type="text">取消</Button> -->
         </div>
         <div class="msgs">
@@ -205,9 +205,10 @@ export default {
   .message-page
     max-width 1000px
     margin 0 auto
-    img
-      width 100%
-      height 300px
+    .msg
+      img
+        width 100%
+        height 300px
   .msg-area
     .add-msg
       .msg-button

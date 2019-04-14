@@ -29,7 +29,7 @@
         </div>
       </div>
       <div class="pagination">
-        <Page :total="totalCount" @on-change='choosePage' show-elevator :current="currentPage"></Page>
+        <Page :page-size="perPage" :total="totalCount" @on-change='choosePage' show-elevator :current="currentPage"></Page>
       </div>
     </div>
   </div>
@@ -61,7 +61,9 @@ export default {
     })
   },
   data () {
-    return {}
+    return {
+      perPage: PER_PAGE
+    }
   },
   computed: {
     typeList () {

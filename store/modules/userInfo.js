@@ -9,7 +9,7 @@ export default {
   state: {
     username: '',
     avatar: '',
-    manager: false,
+    admin: false,
     id: ''
   },
   actions: {
@@ -37,7 +37,7 @@ export default {
     clearInfo (state) {
       state.username = ''
       state.avatar = ''
-      state.manager = false
+      state.admin = false
       state.id = ''
     }
   },

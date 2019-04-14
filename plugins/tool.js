@@ -1,7 +1,9 @@
 import Vue from 'vue'
+import { Modal } from 'iview'
+import { simpleTree } from 'simple-vue-tree'
 import Avatar from '@/components/Avatar'
 import 'simple-vue-tree/dist/lib/simple-tree.css'
-import { simpleTree } from 'simple-vue-tree'
+import { IsPC } from '@/libs/tool'
 
 Vue.component('avatar', Avatar)
 
@@ -21,3 +23,41 @@ Vue.prototype.$formatTime = function (timeStamp) {
 }
 
 Vue.component('simple-tree', simpleTree)
+
+Vue.prototype.$confirm = function confirm (text, func, ...args) {
+  Modal.confirm({
+    render: (h) => {
+      return h('div', {
+        domProps: {
+          innerText: text
+        },
+        style: {
+          'word-wrap': 'break-word'
+        }
+      })
+    },
+    onOk: () => {
+      func(...args)
+    }
+  })
+}
+
+Vue.prototype.$camelCase = (data) => {
+  let newData = {}
+  for (let key in data) {
+    let newKey = key.replace(/_([a-z])/g, (word, $1) => $1.toUpperCase())
+    newData [newKey] = data[key]
+  }
+  return newData
+}
+
+Vue.prototype.$underlineCase = (data) => {
+  let newData = {}
+  for (let key in data) {
+    let newKey = key.replace(/([A-Z])/g, (word, $1) => `_${$1.toLowerCase()}`)
+    newData [newKey] = data[key]
+  }
+  return newData
+}
+
+Vue.prototype.$IsPC = IsPC()
