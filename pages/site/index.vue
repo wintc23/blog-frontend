@@ -58,6 +58,8 @@ export default {
         } = res.data
         return { postList, totalCount, currentPage }
       }
+    }).catch(e => {
+      error({ statusCode: 404, message: '页面找不到了哦' })
     })
   },
   data () {
@@ -67,7 +69,7 @@ export default {
   },
   computed: {
     typeList () {
-      return this.$store.getters['postType/list'] || []
+      return this.$store.getters['postType/list']
     },
     currentType () {
       if (this.$route.query.type) return this.$route.query.type

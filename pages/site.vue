@@ -229,7 +229,7 @@ export default {
     .site-info
       height 37.5rem
       width 100%
-      background center / 100vw 100% no-repeat url(/img/star.jpg)
+      background center / 100vw 100% no-repeat url(http://file.wintc.top/star.jpg)
       .site-info-content
         position relative
         margin 0 auto
@@ -408,3 +408,7 @@ export default {
         padding 60px 0
 </style>
 
+<style lang="stylus">
+@import 'static/css/github-markdown.css'
+
+</style>

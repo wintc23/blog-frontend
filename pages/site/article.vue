@@ -1,12 +1,25 @@
 <template>
   <div class="post-detail-container">
     <div class="post-detail">
-      <h3 class="post-title">{{ postData.title }}</h3>
+      <h1 class="post-title">{{ postData.title }}</h1>
       <div class="post-info">
         <span class="time"> {{ $formatTime(postData.timestamp) }}</span>
         <span class="type" v-if="type">{{ type.name }}</span>
       </div>
-      <div class="post-content" v-html="postData.body_html"></div>
+      <div class="post-content markdown-body" v-html="postData.body_html"></div>
+      <div class="post-like">
+        <Button
+          class="button"
+          :title="!currentUser.id ? '需要登录才能点赞' : (postData.like ? '您赞了该文章' : '赞一下')"
+          type="success"
+          size="small"
+          @click.stop="clickLike"
+          :disabled="!currentUser.id">
+          <span v-if="postData.like">已赞</span>
+          <span v-else>赞</span>
+          <span class="like-num" v-if="postData.likes">{{ postData.likes }}</span>
+        </Button>
+      </div>
       <div class="relative-post" @click="scrollToTop">
         <router-link class="link" :to="{ name: 'site-article', query: { postId: before.id } }" v-if="!!before">
           <span>上一篇：</span>
@@ -48,7 +61,10 @@
                     <div class="date">{{ $formatTime(data.timestamp) }}</div>
                   </div>
                   <div class="comment-content">
-                    <p @click.stop="checkReply(data)">{{ data.body }}</p>
+                    <p @click.stop="checkReply(data)">
+                      <span v-if="data.hide" class="check-waiting" title="当前仅自己可见，需管理员审核后才会公开">(待审核)</span>
+                      {{ data.body }}
+                    </p>
                     <div class="comment-reply">
                       <template v-if="data.commentEdit">
                         <Input class="reply-input" placeholder="回复：说点啥呢．．．" type="textarea" autosize v-model="data.comment"/>
@@ -81,7 +97,10 @@
                   <span class="comment-time">{{ $formatTime(data.timestamp) }}</span>
                 </div>
                 <div class="comment-content">
-                <p class="text">{{ data.body }}</p>
+                <p class="text" @click.stop="checkReply(data)">
+                  <span v-if="data.hide" class="check-waiting" title="当前仅自己可见，需管理员审核后才会公开">(待审核)</span>
+                  {{ data.body }}
+                </p>
                 <div class="comment-reply">
                   <template v-if="data.commentEdit">
                     <Input class="reply-input" placeholder="说点啥呢．．．" type="textarea" autosize v-model="data.comment"/>
@@ -104,7 +123,7 @@
 </template>
 
 <script>
-import { getPost } from '@/api/posts'
+import { getPost, likePost, cancelLikePost } from '@/api/posts'
 import { addComment } from '@/api/comment'
 import CommentInput from '@/components/CommentInput'
 import _ from 'lodash'
@@ -137,6 +156,8 @@ export default {
           commentTree: list
         }
       }
+    }).catch(e => {
+      error({ statusCode: 404, message: '页面找不到了哦' })
     })
   },
   components: {
@@ -158,7 +179,7 @@ export default {
       return this.postData.comments
     },
     typeList () {
-      return this.$store.getters['postType/list'] || []
+      return this.$store.getters['postType/list']
     },
     type () {
       let type = this.typeList.find(item => item.id === this.postData.type_id)
@@ -207,13 +228,8 @@ export default {
       response && (params.response_id = response)
       addComment(params).then(res => {
         if (res.status == 200) {
-          let query = { ...this.$route.query }
-          query.refresh = +query.refresh ? 0 : 1
+          this.refreshPage()
           this.comment = ''
-          this.$router.push({
-            name: this.$route.name,
-            query
-          })
         }
       }).catch(error => {
         this.$Message.error('网络请求失败')
@@ -222,6 +238,24 @@ export default {
     checkReply (data) {
       if (this.$IsPC) return
       this.setComment(data)
+    },
+    clickLike () {
+      let func = this.postData.like ? cancelLikePost : likePost
+      func(this.postData.id).then(res => {
+        res.status == 200 && this.refreshPage()
+      })
+    },
+    refreshPage () {
+      if (!this.currentUser.id) {
+        this.$bus.$emit('login-show')
+        return
+      }
+      let query = { ...this.$route.query }
+      query.refresh = +query.refresh ? 0 : 1
+      this.$router.push({
+        name: this.$route.name,
+        query
+      })
     }
   }
 }
@@ -244,6 +278,20 @@ export default {
         margin-right 26px
       .type
         color #ff7f21
+    .post-like
+      text-align center
+      line-height 5rem
+      margin-top 2rem
+      border-top 1px solid #eaecef
+      .button
+        width 7rem
+        font-size 20px
+        span
+          width 50%
+        .like-num
+          margin-left .5rem
+          padding-left .5rem
+          border-left 1px solid white
     .relative-post
       margin 2rem 0
       .link
@@ -313,6 +361,14 @@ export default {
   background #ECF5FD
   padding 5px 10px
   border-radius 4px
+  .check-waiting
+    color white
+    font-weight bold
+    border-radius 4px
+    padding 1px 2px
+    background #06B038
+    user-select none
+    cursor pointer
   .comment-reply
     overflow hidden
     .reply-input

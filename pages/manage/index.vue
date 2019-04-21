@@ -88,7 +88,7 @@ export default {
   },
   computed: {
     typeList () {
-      return this.$store.getters['postType/list'] || []
+      return this.$store.getters['postType/manageList']
     },
     currentType () {
       if (this.$route.query.type) return this.$route.query.type

@@ -2,7 +2,7 @@
   <div class="message-page-container">
     <div class="message-page">
       <div class="msg">
-        <img src="/img/paopaobing.jpg" alt="">
+        <img src="http://file.wintc.top/paopaobing.jpg" alt="">
       </div>
       <div class="msg-area">
         <div class="add-msg">
@@ -34,7 +34,10 @@
                     <div class="date">{{ $formatTime(data.timestamp) }}</div>
                   </div>
                   <div class="msg-content">
-                    <p>{{ data.body }}</p>
+                    <p>
+                      <span v-if="data.hide" class="check-waiting" title="当前仅自己可见，需管理员审核后才会公开">(待审核)</span>
+                      {{ data.body }}
+                    </p>
                     <div class="msg-reply">
                       <template v-if="data.msgEdit">
                         <Input class="reply-input" placeholder="说点啥呢．．．" type="textarea" autosize v-model="data.msg"/>
@@ -67,7 +70,7 @@
                   <span class="msg-time">{{ $formatTime(data.timestamp) }}</span>
                 </div>
                 <div class="msg-content">
-                <p class="text">{{ data.body }}</p>
+                <p class="text"><span v-if="data.hide" class="check-waiting" title="当前仅自己可见，需管理员审核后才会公开">(待审核)</span>{{ data.body }}</p>
                 <div class="msg-reply">
                   <template v-if="data.msgEdit">
                     <Input class="reply-input" placeholder="说点啥呢．．．" type="textarea" autosize v-model="data.msg"/>
@@ -129,6 +132,8 @@ export default {
           totalCount: total,
           currentPage: page }
       }
+    }).catch(e => {
+      error({ statusCode: 404, message: '页面找不到了哦' })
     })
   },
   components: {
@@ -178,6 +183,7 @@ export default {
         if (res.status == 200) {
           let query = { ...this.$route.query }
           query.refresh = +query.refresh ? 0 : 1
+          !response && (query.page = 1)
           this.msg = ''
           this.$router.push({
             name: this.$route.name,
@@ -209,6 +215,8 @@ export default {
       img
         width 100%
         height 300px
+  .pagination
+    padding .5rem 0
   .msg-area
     .add-msg
       .msg-button
@@ -267,6 +275,14 @@ export default {
   background #ECF5FD
   padding 5px 10px
   border-radius 4px
+  .check-waiting
+    color white
+    font-weight bold
+    border-radius 4px
+    padding 1px 2px
+    background #06B038
+    user-select none
+    cursor pointer
   .msg-reply
     overflow hidden
     .reply-input

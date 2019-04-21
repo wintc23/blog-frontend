@@ -29,7 +29,7 @@ Vue.prototype.$confirm = function confirm (text, func, ...args) {
     render: (h) => {
       return h('div', {
         domProps: {
-          innerText: text
+          innerHTML: text
         },
         style: {
           'word-wrap': 'break-word'

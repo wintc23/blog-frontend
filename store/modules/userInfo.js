@@ -10,16 +10,25 @@ export default {
     username: '',
     avatar: '',
     admin: false,
-    id: ''
+    id: '',
+    loadingStatus: 0
   },
   actions: {
-    getUserInfo (context) {
+    getUserInfo (context, data = {}) {
+      if (!data.force && this.loadingStatus) return
       if (getToken()) {
-        getUserInfoByToken().then(res => {
+        this.loadingStatus = 1
+        return getUserInfoByToken().then(res => {
           if (res.status === 200) {
             context.commit('setInfo', res.data)
+            this.loadingStatus = 2
+            return true
+          } else {
+            this.loadingStatus = 0
+            return false
           }
         }).catch(error => {
+          this.loadingStatus = 0
           clearToken()
         })
       }
@@ -43,7 +52,12 @@ export default {
   },
   getters: {
     info (state) {
-      return state
+      return {
+        id: state.id,
+        username: state.username,
+        admin: state.admin,
+        avatar: state.avatar
+      }
     }
   }
 }

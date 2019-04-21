@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { getPost, savePostImage, savePost } from '@/api/posts'
+import { getPost, savePostImage, savePost, getFileUploadToken } from '@/api/posts'
 import { BASE_URL } from '@/libs/config'
 
 export default {
@@ -84,7 +84,7 @@ export default {
   },
   computed: {
     typeList () {
-      return this.$store.getters['postType/list'] || []
+      return this.$store.getters['postType/manageList']
     },
     currentUser () {
       return this.$store.getters['userInfo/info']
@@ -108,20 +108,14 @@ export default {
           let attrList = ['title', 'hide', 'id', 'body', 'body_html', 'type_id', 'abstract', 'abstract_image']
           res.data.body = res.data.body || ''
           let data = {}
-          attrList.forEach(attr => data[attr] = res.data[attr] || '')
+          attrList.forEach(attr => data[attr] = res.data[attr])
           this.postData = this.$camelCase(data)
         }
       })
     },
     imgAdd (pos, file) {
-      let formdata = new FormData()
-      formdata.append('image', file)
-      savePostImage(formdata).then(res => {
-        if (res.status === 200) {
-          let { filename, path } = res.data
-          let url = `${BASE_URL}/get-file/?filename=${filename}&path=${path}`
-          this.$refs.editor.$img2Url(pos, url)
-        }
+      savePostImage(file, (url) => {
+        this.$refs.editor.$img2Url(pos, url)
       })
     },
     imgDel () {
@@ -144,14 +138,8 @@ export default {
     changeAbstractImage (event) {
       console.log(event)
       if (!event.target.files.length) return
-      let formdata = new FormData()
-      formdata.append('image', event.target.files[0])
-      savePostImage(formdata).then(res => {
-        if (res.status === 200) {
-          let { filename, path } = res.data
-          let url = `${BASE_URL}/get-file/?filename=${filename}&path=${path}`
-          this.postData.abstractImage = url
-        }
+      savePostImage(event.target.files[0], (url) => {
+        this.postData.abstractImage = url
       })
     },
     clickAbstractImage () {

@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { checkAdmin } from '@/api/user'
+
 export default {
   data () {
     return {
@@ -39,14 +41,24 @@ export default {
         name: 'manage-message',
         icon: "ios-chatboxes-outline",
         value: 'message'
-      },
-      {
-        title: '站点介绍管理',
-        name: 'manage-about',
-        icon: "md-contact",
-        value: 'about'
       }]
     }
+  },
+  computed: {
+    currentUser () {
+      return this.$store.getters['userInfo/info']
+    }
+  },
+  beforeRouteEnter (to, from, next) {
+    checkAdmin().then(res => {
+      if (res.status == 200 && res.data.admin) {
+        next()
+      } else {
+        next({ name: 'site' })
+      }
+    }).catch(error => {
+      next({ name: 'site' })
+    })
   },
   methods: {
     selectMenu (name) {

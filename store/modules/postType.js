@@ -17,12 +17,17 @@ export default {
   },
   mutations: {
     setPostType (state, list) {
+      list.sort((a, b) => a.sort > b.sort ? 1 : -1)
       state.list = list
     }
   },
   getters: {
     list (state) {
-      return state.list
+      if (!state.list) return []
+      return state.list.filter(item => !item.special)
+    },
+    manageList (state) {
+      return state.list || []
     }
   }
 }

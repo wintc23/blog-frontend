@@ -12,6 +12,10 @@ export function getUserInfoById (id) {
   return axios.get(`/get-user/${id}`)
 }
 
+export function checkAdmin () {
+  return axios.get('/check-admin/')
+}
+
 // export default {
   // register (params) {
     // return axios.post('/api/register/', params)
