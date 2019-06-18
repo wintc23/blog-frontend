@@ -1,16 +1,13 @@
 <template>
-  <div>
-    <router-link :to="{ name: 'site' }">主页</router-link>
-  </div>
+  <div></div>
 </template>
 
 <script>
 export default {
-  created() {
-    this.$router.push({ name: 'site' })
-  }
+  middleware: 'homeRoute'
 }
 </script>
+
 
 <style lang="stylus">
 body

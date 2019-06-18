@@ -23,8 +23,10 @@ export default {
           setToken(res.data.token)
           window.opener && window.opener._loginCallback && window.opener._loginCallback(true)
         } else {
-          window.opener && window.opener._loginCallback && window.opener._loginCallback(false)        
+          window.opener && window.opener._loginCallback && window.opener._loginCallback(false)
         }
+        window.opener = null
+        window.close()
       })
     }
   }
