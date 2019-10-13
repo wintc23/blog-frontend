@@ -31,8 +31,7 @@ export default {
    */
   plugins: [
     { src: '@/plugins/iview', ssr: true },
-    { src: '@/plugins/tool', ssr: false },
-    { src: '~plugins/mavon-editor', ssr: false }
+    { src: '@/plugins/tool', ssr: false }
   ],
 
   /*

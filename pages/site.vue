@@ -1,5 +1,7 @@
 <template>
   <div class="page-container">
+    <link rel="stylesheet" type="text/css" href="/css/prism.css">
+    <script src="/js/prism.js"></script>
     <div class="page-header">
       <div class="menu-btn" @click.stop="switchDownNav">
         <div :class="['menu', showNav ? 'on' : '']"></div>
@@ -409,6 +411,6 @@ export default {
 </style>
 
 <style lang="stylus">
+@import 'static/css/prism.css'
 @import 'static/css/github-markdown.css'
-
 </style>

@@ -17,13 +17,14 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/pwa": "^2.6.0",
+    "@tinymce/tinymce-vue": "^3.0.1",
     "axios": "^0.18.0",
     "cross-env": "^5.2.0",
     "iview": "^3.3.3",
     "lodash": "^4.17.11",
-    "mavon-editor": "^2.7.3",
     "nuxt": "^2.4.0",
-    "simple-vue-tree": "^2.0.3"
+    "simple-vue-tree": "^2.0.3",
+    "tinymce": "^5.0.16"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^0.0.1",

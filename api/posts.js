@@ -25,7 +25,7 @@ export function addPost (type) {
   return axios.get(`/add-post/${type}`)
 }
 
-export function savePostImage (file, callback) {
+export function uploadFile (file, callback, failCallback) {
   let filename = uuidv4().replace(/-/g, '')
   getFileUploadToken(filename).then(res => {
     if (res.status == 200) {
@@ -44,9 +44,17 @@ export function savePostImage (file, callback) {
         if (response.status == 200) {
           let url = `${domain}/${response.data.key}`
           callback && callback(url)
+        } else {
+          failCallback && failCallback()
         }
+      }).catch(() => {
+        failCallback && failCallback()
       })
+    } else {
+      failCallback && failCallback()
     }
+  }).catch(() => {
+    failCallback && failCallback()
   })
 }
 

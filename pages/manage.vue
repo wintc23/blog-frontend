@@ -22,6 +22,7 @@
 import { checkAdmin } from '@/api/user'
 
 export default {
+  middleware: 'manage',
   data () {
     return {
       menuList: [{
@@ -49,16 +50,22 @@ export default {
       return this.$store.getters['userInfo/info']
     }
   },
-  beforeRouteEnter (to, from, next) {
-    checkAdmin().then(res => {
-      if (res.status == 200 && res.data.admin) {
-        next()
-      } else {
-        next({ name: 'site' })
+  watch: {
+    '$route.name': {
+      immediate: true,
+      handler () {
+        checkAdmin().then(res => {
+          if (res.status !== 200 || !res.data.admin) {
+            this.$router.replace({ name: 'site' })
+          }
+        }).catch(error => {
+          this.$router.replace({ name: 'site' })
+        })
       }
-    }).catch(error => {
-      next({ name: 'site' })
-    })
+    }
+  },
+  created() {
+    this.$store.dispatch('userInfo/getUserInfo')    
   },
   methods: {
     selectMenu (name) {
@@ -75,6 +82,7 @@ export default {
   height 100vh
   .manage-header
     position relative
+    z-index 1 // 创建层叠上下文以便文章编辑全屏
     .return-site
       float left
       position relative

@@ -14,14 +14,11 @@
         @click="save">保存</Button>
     </div>
     <div class="post-content">
-      <mavon-editor
+      <editor
         ref="editor"
-        v-model="postData.body"
-        class="editor"
-        @imgAdd="imgAdd"
-        @imgDel="imgDel"
-        @change="changeString">
-      </mavon-editor>
+        v-model="postData.bodyHtml"
+        class="editor">
+      </editor>
     </div>
     <Modal
       title="文章设置"
@@ -62,11 +59,17 @@
 </template>
 
 <script>
-import { getPost, savePostImage, savePost, getFileUploadToken } from '@/api/posts'
-import { BASE_URL } from '@/libs/config'
+import { getPost, uploadFile, savePost, getFileUploadToken } from '@/api/posts'
+import Editor from '@/components/Editor'
 
 export default {
   scrollToTop: true,
+  components: {
+    Editor
+  },
+  asyncData({isDev, route, store, env, params, query, req, res, redirect, error}) {
+    return {}
+  },
   data () {
     return {
       postData: {
@@ -114,7 +117,7 @@ export default {
       })
     },
     imgAdd (pos, file) {
-      savePostImage(file, (url) => {
+      uploadFile(file, (url) => {
         this.$refs.editor.$img2Url(pos, url)
       })
     },
@@ -138,7 +141,7 @@ export default {
     changeAbstractImage (event) {
       console.log(event)
       if (!event.target.files.length) return
-      savePostImage(event.target.files[0], (url) => {
+      uploadFile(event.target.files[0], (url) => {
         this.postData.abstractImage = url
       })
     },
