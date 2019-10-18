@@ -6,12 +6,14 @@ import { BASE_URL } from '@/libs/config'
 
 export default {
   namespaced: true,
-  state: {
-    username: '',
-    avatar: '',
-    admin: false,
-    id: '',
-    loadingStatus: 0
+  state () {
+    return {
+      username: '',
+      avatar: '',
+      admin: false,
+      id: '',
+      loadingStatus: 0
+    }
   },
   actions: {
     getUserInfo (context, data = {}) {

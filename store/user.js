@@ -4,9 +4,11 @@ import { BASE_URL } from '@/libs/config'
 
 export default {
   namespaced: true,
-  state: {
-    info: {},
-    loading: {}
+  state () {
+    return {
+      info: {},
+      loading: {}
+    }
   },
   actions: {
     getInfo (context, data) {

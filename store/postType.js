@@ -2,8 +2,10 @@ import { getPostType } from '@/api/posts'
 
 export default {
   namespaced: true,
-  state: {
-    list: null,
+  state () {
+    return {
+      list: null
+    }
   },
   actions: {
     getType ({ commit, state }, data = {}) {

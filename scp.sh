@@ -1,4 +1,4 @@
 #!/bin/bash
 git push
-yarn run build
+yarn generate
 scp -r dist/* root@wintc.top:/home/lushg/blog-frontend
