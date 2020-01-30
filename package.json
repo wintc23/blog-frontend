@@ -24,7 +24,7 @@
     "lodash": "^4.17.11",
     "nuxt": "^2.4.0",
     "simple-vue-tree": "^2.0.3",
-    "tinymce": "^5.0.16"
+    "tinymce": "^5.1.4"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^0.0.1",
